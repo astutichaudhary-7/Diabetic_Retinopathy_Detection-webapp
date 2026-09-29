@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetic Retinopathy Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+    <div class="bg-circle circle1"></div>
+    <div class="bg-circle circle2"></div>
+    <div class="bg-circle circle3"></div>
+    <div class="medical-grid"></div>
+    </div>
+    <div class="bg-circle circle1"></div>
+    <div class="bg-circle circle2"></div>
+    <div class="bg-circle circle3"></div>
+    <div class="grid-overlay"></div>
+    <div class="main-container">
+        <div class="glass-card">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+                <h4>AI Powered EfficientNetV2 Model</h4>
+            </div>
+            <h1> Diabetic Retinopathy Detection</h1>
+            <p class="subtitle">
+                Upload a retinal fundus image and let our trained EfficientNetV2 model
+                predict the stage of Diabetic Retinopathy with confidence score.
+            </p>
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <label class="upload-box" id="dropzone">
+                    <input type="file" id="imageInput" name="image" accept=".png,.jpg,.jpeg" required hidden>
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <i class="fa-solid fa-cloud-arrow-up"></i>
+                        </div>
+                        <h2>Choose Retina Image</h2>
+                        <p>Drag & Drop your image here</p>
+                        <span> or Click to Browse</span>
+                        <div class="supported">
+                            <i class="fa-solid fa-image"></i>
+                            JPG • JPEG • PNG
+                        </div>
+                        <div id="fileName" class="selected-file">
+                            No file selected
+                        </div>
+                    </div>
+                </label>
+                <button class="predict-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <span>Predict Disease</span>
+                </button>
+            </form>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h3>AI Prediction</h3>
+                    <p>An EfficientNetV2 deep learning model analyzes retinal fundus images and predicts one of five
+                        diabetic retinopathy stages.
+                    </p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">
+                        <i class="fa-solid fa-shield-heart"></i>
+                    </div>
+                    <h3>Early Detection</h3>
+                    <p>Early diagnosis helps reduce vision loss and allows timely medical treatment before the disease
+                        becomes severe.
+                    </p>
+                </div>
+            </div>
+            <div class="stage-section">
+                <h2>Disease Stages</h2>
+                <div class="stage-grid">
+                    <div class="stage-card">
+                        <div class="stage-dot green"></div>
+                        <h3>No DR</h3>
+                        <p>Healthy Retina</p>
+                    </div>
+                    <div class="stage-card">
+                        <div class="stage-dot yellow"></div>
+                        <h3>Mild</h3>
+                        <p>Early Signs</p>
+                    </div>
+                    <div class="stage-card">
+                        <div class="stage-dot orange"></div>
+                        <h3>Moderate</h3>
+                        <p>Moderate Damage</p>
+                    </div>
+                    <div class="stage-card">
+                        <div class="stage-dot red"></div>
+                        <h3>Severe</h3>
+                        <p>Severe Damage</p>
+                    </div>
+                    <div class="stage-card">
+                        <div class="stage-dot purple"></div>
+                        <h3>PDR</h3>
+                        <p>Advanced Stage</p>
+                    </div>
+                </div>
+            </div>
+            <div class="tips-box">
+                <h2>
+                    <i class="fa-solid fa-lightbulb"></i>
+                    Tips Before Uploading
+                </h2>
+                <ul><li>
+                        Use a clear retinal fundus image.
+                    </li>
+                    <li>
+                        Supported Formats:
+                        <b>JPG, JPEG, PNG</b>
+                    </li>
+                    <li>
+                        Avoid blurry or cropped images.
+                    </li>
+                    <li>
+                        Image should clearly show the retina.
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        const input = document.getElementById("imageInput");
+        const fileName = document.getElementById("fileName");
+        const dropzone = document.getElementById("dropzone");
+        input.addEventListener("change", function () {
+            if (input.files.length > 0) {
+                fileName.innerHTML ='<i class="fa-solid fa-circle-check"></i> '+ input.files[0].name;
+            }
+        });
+        dropzone.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            dropzone.classList.add("drag");
+        });
+        dropzone.addEventListener("dragleave", () => {
+            dropzone.classList.remove("drag");
+        });
+        dropzone.addEventListener("drop", (e) => {
+            e.preventDefault();
+            dropzone.classList.remove("drag");
+            input.files = e.dataTransfer.files;
+            fileName.innerHTML = '<i class="fa-solid fa-circle-check"></i> ' + input.files[0].name;
+        });
+    </script>
+</body>
+</html>

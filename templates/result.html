@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-circle circle1"></div>
+    <div class="bg-circle circle2"></div>
+    <div class="bg-circle circle3"></div>
+    <div class="grid-overlay"></div>
+    <div class="main-container">
+        <div class="glass-card result-card">
+            <div class="result-header">
+                <div class="success-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h1>Prediction Result</h1>
+                <p>
+                    Your retinal image has been successfully analyzed using our AI-powered EfficientNetV2 model.
+                </p>
+            </div>
+            <div class="top-section">
+                <div class="image-section">
+                    <h2>
+                        <i class="fa-solid fa-eye"></i>
+                        Uploaded Retina Image
+                    </h2>
+                    <div class="image-card">
+                        <img src="{{ url_for('static', filename=image) }}" alt="Retina Image">
+                    </div>
+                    <div class="scan-box">
+                        <div class="scan-icon">
+                        </div>
+                        <div>
+                            <h4>Scan Completed</h4>
+                            <p>
+                                The uploaded retinal fundus image has been processed successfully by the AI screening
+                                system.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="image-section gradcam-section">
+                    <h2>
+                        <i class="fa-solid fa-fire"></i>
+                        AI Focus Areas (Grad-CAM)
+                    </h2>
+                    <div class="image-card">
+                        <img src="{{ url_for('static', filename=gradcam_image) }}" alt="Grad-CAM Heatmap Overlay">
+                    </div>
+                    <div class="scan-box">
+                        <div class="scan-icon">
+                        </div>
+                        <div>
+                            <h4>Explainability View</h4>
+                            <p>
+                                The highlighted regions show which parts of the retina most influenced the model's
+                                prediction, giving a visual reason behind the diagnosis rather than a black-box result.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="prediction-section">
+                    <div class="prediction-card">
+                        <div class="prediction-top">
+                            <div>
+                                <h2>AI Diagnosis</h2>
+                                <p>EfficientNetV2 Based Medical Analysis</p>
+                            </div>
+                        </div>
+                        <h1 class="prediction-name">
+                            {{ prediction }}
+                        </h1>
+                        <div class="prediction-badge">
+                            <i class="fa-solid fa-brain"></i>
+                            AI Generated Result
+                        </div>
+                        <div class="confidence-box">
+                            <h2>Confidence Score</h2>
+                            <div class="confidence-value">
+                                {{ confidence }}%
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" id="progressBar"></div>
+                            </div>
+                        </div>
+                        <script>
+                            document.getElementById("progressBar").style.width = "{{ confidence }}%";
+                        </script>
+                    </div>
+                </div>
+                <h2 class="recommendation-title">
+                    Recommendation
+                </h2>
+                <div class="recommendation-card">
+                    {% if prediction=="No_DR" %}
+                    <div class="recommendation-header green">
+                        <i class="fa-solid fa-circle-check"></i>
+                        Healthy Retina
+                    </div>
+                    <p>
+                        No signs of diabetic retinopathy have been detected in the uploaded retinal image. The retina
+                        appears healthy, and there is currently no evidence of disease progression. Continue maintaining
+                        a healthy lifestyle and schedule regular eye examinations for preventive care.
+                    </p>
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <p>Visit an ophthalmologist once every year for routine retinal screening.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-heart-pulse"></i>
+                            <p>Maintain healthy blood sugar levels, blood pressure, and cholesterol through proper diet
+                                and exercise.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-apple-whole"></i>
+                            <p>Eat a balanced diet rich in leafy vegetables, fruits, and foods containing Vitamin A.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-shield-heart"></i>
+                            <p>Protect your vision by following a healthy lifestyle and avoiding smoking habits.</p>
+                        </div>
+                    </div>
+                    {% elif prediction=="Mild" %}
+                    <div class="recommendation-header blue">
+                        <i class="fa-solid fa-eye"></i>
+                        Mild Diabetic Retinopathy
+                    </div>
+                    <p>
+                        Early retinal abnormalities have been detected. Although vision may not be affected at this
+                        stage, proper diabetes management and timely medical follow-up can help prevent further disease
+                        progression.
+                    </p>
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <p>Schedule regular retinal examinations with an eye specialist every 6 to 12 months.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-syringe"></i>
+                            <p>Keep blood glucose, blood pressure, and cholesterol under strict medical control.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-bowl-food"></i>
+                            <p>Follow a healthy diabetic diet and maintain regular physical activity.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-file-medical"></i>
+                            <p>Follow your doctor's advice and continue prescribed medications without interruption.</p>
+                        </div>
+                    </div>
+                    {% elif prediction=="Moderate" %}
+                    <div class="recommendation-header blue">
+                        <i class="fa-solid fa-user-doctor"></i>
+                        Moderate Diabetic Retinopathy
+                    </div>
+                    <p>
+                        Moderate retinal damage has been detected, indicating noticeable changes in the retinal blood
+                        vessels. Prompt medical consultation and regular monitoring are recommended to reduce the risk
+                        of vision loss.
+                    </p>
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-stethoscope"></i>
+                            <p>Consult an ophthalmologist as soon as possible for a detailed retinal evaluation.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-eye"></i>
+                            <p>Undergo retinal screening every few months to monitor disease progression.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-droplet"></i>
+                            <p>Maintain excellent blood sugar control along with proper blood pressure management.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-pills"></i>
+                            <p>Take all prescribed medications consistently and never skip follow-up appointments.</p>
+                        </div>
+                    </div>
+                    {% elif prediction=="Severe" %}
+                    <div class="recommendation-header red">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        Severe Diabetic Retinopathy
+                    </div>
+                    <p>
+                        Severe retinal damage has been identified. Immediate medical attention is strongly recommended
+                        to prevent irreversible vision loss and further retinal complications.
+                    </p>
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-hospital"></i>
+                            <p>Visit a retina specialist immediately for advanced retinal examination.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-eye"></i>
+                            <p>Frequent retinal monitoring is necessary to evaluate disease progression.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-heart-circle-check"></i>
+                            <p>Maintain strict diabetes control and carefully follow all treatment recommendations.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-file-prescription"></i>
+                            <p>Complete every prescribed treatment plan without missing medications or appointments.</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="recommendation-header purple">
+                        <i class="fa-solid fa-hospital"></i>
+                        Proliferative Diabetic Retinopathy
+                    </div>
+                    <p>
+                        Advanced diabetic retinopathy has been detected with a high possibility of abnormal blood vessel
+                        growth. Immediate specialist treatment is essential to preserve vision and reduce complications.
+                    </p>
+                    <div class="recommendation-list">
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <p>Consult a retina specialist immediately for advanced treatment planning.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-laser-pointer"></i>
+                            <p>Laser therapy or surgical intervention may be recommended depending on disease severity.
+                            </p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-eye"></i>
+                            <p>Attend regular follow-up visits to monitor retinal health and treatment response.</p>
+                        </div>
+                        <div class="recommendation-item">
+                            <i class="fa-solid fa-heart-circle-check"></i>
+                            <p>Strictly control diabetes and carefully follow all medical instructions to protect
+                                vision.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="prediction-info">
+                    <div class="info-card">
+                        <i class="fa-solid fa-microchip"></i>
+                        <div>
+                            <h4>Model</h4>
+                            <p>EfficientNetV2S (Transfer Learning)</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fa-solid fa-image"></i>
+                        <div>
+                            <h4>Input Size</h4>
+                            <p>224 × 224 Retina Fundus Image</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <div>
+                            <h4>Total Classes</h4>
+                            <p>5 Disease Categories</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <div>
+                            <h4>Prediction Speed</h4>
+                            <p>Less than 2 Seconds</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="stage-section">
+                    <h2>Disease Stages</h2>
+                    <div class="stage-grid">
+                        <div class="stage-card">
+                            <div class="stage-dot green"></div>
+                            <h3>No DR</h3>
+                            <p>Healthy retina with no signs of diabetic retinopathy.</p>
+                        </div>
+                        <div class="stage-card">
+                            <div class="stage-dot yellow"></div>
+                            <h3>Mild</h3>
+                            <p>Small retinal abnormalities detected. Regular monitoring is recommended.</p>
+                        </div>
+                        <div class="stage-card">
+                            <div class="stage-dot orange"></div>
+                            <h3>Moderate</h3>
+                            <p>Noticeable retinal vessel damage requiring medical supervision.</p>
+                        </div>
+                        <div class="stage-card">
+                            <div class="stage-dot red"></div>
+                            <h3>Severe</h3>
+                            <p>Advanced retinal damage with high risk of vision impairment.</p>
+                        </div>
+                        <div class="stage-card">
+                            <div class="stage-dot purple"></div>
+                            <h3>PDR</h3>
+                            <p>Abnormal blood vessel growth requiring immediate specialist care.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary-card">
+                    <h2>
+                        <i class="fa-solid fa-file-medical"></i>
+                        Prediction Summary
+                    </h2>
+                    <div class="summary-grid">
+                        <div>
+                            <strong>Prediction</strong>
+                            <p>{{ prediction }}</p>
+                        </div>
+                        <div>
+                            <strong>Confidence</strong>
+                            <p>{{ confidence }}%</p>
+                        </div>
+                        <div>
+                            <strong>Model</strong>
+                            <p>EfficientNetV2</p>
+                        </div>
+                        <div>
+                            <strong>Classes</strong>
+                            <p>5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="next-predict-section">
+                    <a href="/" class="next-predict-btn">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        Predict Another Retina Fundus
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
